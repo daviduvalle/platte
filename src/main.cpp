@@ -9,10 +9,13 @@ using std::vector;
 using std::string;
 
 int main() {
-    Dataset dataset = Dataset("../linear_data.csv", true, false, false);
+    Dataset dataset = Dataset("../linear_data.csv", true, false);
     dataset.readData();
     LinearRegression linearRegression = LinearRegression(&dataset);
     linearRegression.train();
-    
+    std::vector<double> input;
+    input.emplace_back(100);
+    double pred = linearRegression.predict(input);
+    std::cout << "Prediction: " << pred << "\n";
     return 0;
 }

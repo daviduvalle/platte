@@ -7,42 +7,24 @@ LinearRegression::LinearRegression(Dataset * dataset)
 
 void LinearRegression::train() 
 {
-    std::cout << "train" << "\n";
     int weightsCount = _dataset->getTrainingData()[0].size();
     // Include the bias
-    std::vector<double> weights(weightsCount+1);
-    weights[0] = 0.01;
-    weights[1] = 0.01;
-    std::cout << "weights count: " << weights.size() << "\n";
-    double loss = computeLoss(&weights);
+    for (int i = 0; i < weightsCount + 1; i++)
+    {
+        _weights.emplace_back(0);
+    }
+    double loss = computeLoss(&_weights);
     int count = 0;
     while (loss > 0.00001)
     {
-        {
-            std::cout << "Iteration " << count << "\n";
-            std::cout << "Previous loss: " << std::to_string(loss) << " running GD\n";
-            std::cout << "Weights" << "\n";
-            for (auto w : weights)
-            {
-                std::cout << w << " ";
-            }
-            std::cout << "\n";
-        }
         std::vector<int> sample = computeRandomIndices();
-        std::vector<double> weightsGradients = weightsGradient(&weights, &sample);
-        double biasG = biasGradient(&weights, &sample);
-        gradientDescent(&weights, &weightsGradients, biasG);
-        loss = computeLoss(&weights);
+        std::vector<double> weightsGradients = weightsGradient(&_weights, &sample);
+        double biasG = biasGradient(&_weights, &sample);
+        gradientDescent(&_weights, &weightsGradients, biasG);
+        loss = computeLoss(&_weights);
         count++;
     }
-    std::cout << "Final weights" << "\n";
-    for (auto w : weights)
-    {
-        std::cout << w << " ";
-    }
-    std::cout << "\n";
 }
-
 
 double LinearRegression::computeLoss(std::vector<double> *weights)
 {
@@ -138,7 +120,7 @@ double LinearRegression::biasGradient(std::vector<double> *weights, std::vector<
 
 void LinearRegression::gradientDescent(std::vector<double> *weights, std::vector<double> *gradients, double bias)
 {
-    double learningRate = 0.0001;
+    double learningRate = 0.1;
     for (int i = 0; i < weights->size() - 1; i++)
     {
         (*weights)[i] = weights->at(i) - (learningRate * gradients->at(i));
@@ -146,7 +128,20 @@ void LinearRegression::gradientDescent(std::vector<double> *weights, std::vector
     (*weights)[weights->size()-1] = weights->at(weights->size()-1) - (learningRate * bias);
 }
 
-void LinearRegression::predict() 
+double LinearRegression::predict(std::vector<double> input)
 {
-    std::cout << "predict" << "\n";
+    std::vector<double> minValues = _dataset->getMinValues();
+    std::vector<double> maxValues = _dataset->getMaxValues();
+    double prediction = 0.0;
+
+    for (int i = 0; i < input.size(); i++)
+    {
+        double denominator = maxValues.at(i) - minValues.at(i);
+        double normalized = (input.at(i) - minValues.at(i)) / denominator;
+        prediction += normalized * _weights.at(i);
+    }
+
+    prediction += _weights.at(_weights.size()-1);
+
+    return prediction;
 }

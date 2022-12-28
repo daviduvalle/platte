@@ -15,11 +15,11 @@ class LinearRegression : public MLAlgorithm
     public:
         LinearRegression(Dataset * dataset);
         void train();
-        void predict();
-        static constexpr double learningRate = 0.1;
+        double predict(std::vector<double> input);
         static constexpr int BATCH_SIZE = 32;
     private:
         Dataset *_dataset;
+        std::vector<double> _weights;
         double computeLoss(std::vector<double> *);
         double computePrediction(int, std::vector<double> *);
         std::vector<int> computeRandomIndices();

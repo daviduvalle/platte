@@ -2,12 +2,11 @@
 
 const std::string WHITESPACE = " \n\r\t\f\v";
 
-Dataset::Dataset(std::string filename, bool hasHeader, bool hasIndex, bool standardize)
+Dataset::Dataset(std::string filename, bool hasHeader, bool hasIndex)
 {
     _filename = filename;
     _hasHeader = hasHeader;
     _hasIndex = hasIndex;
-    _standardize = standardize;
 }
  
 std::string ltrim(const std::string &s)
@@ -53,10 +52,9 @@ void Dataset::readData()
         _allData.emplace_back(row);
     }   
     inputFile.close();
-    if (_standardize)
-    {
-        standardizeData();
-    }
+
+    // Normalize input features to avoid integer overflow
+    normalizeData();
 
     // Split train and label data
     int lastElementIndex = _allData.at(0).size() - 1;
@@ -69,57 +67,37 @@ void Dataset::readData()
     }
 }
 
-void Dataset::standardizeData()
+void Dataset::normalizeData()
 {
-    std::vector<double> means = computeMeans();
-    std::vector<double> stdevs = computeStdevs(&means);
-
+    computeMinMax();
     int count = 0;
     for (auto row : _allData)
     {
         for (int i = 0; i < row.size()-1; i++)
         {
-            row[i] = (row[i] - means[i]) / stdevs[i];
+            row[i] = (row[i] - _minValues.at(i)) / (_maxValues.at(i) - _minValues.at(i));
         }
         _allData[count++] = row;
     }
 }
 
-std::vector<double> Dataset::computeMeans()
+void Dataset::computeMinMax()
 {
-    std::vector<double> means(_allData.at(0).size()-1, 0);
-    for (auto row : _allData)
+    double minVal = INT_MAX, maxVal = 0;
+    int cols = _allData.at(0).size() - 1;
+    int rows = _allData.size();
+    for (int i = 0; i < cols; i++)
     {
-        for (int i = 0; i < row.size()-1; i++)
+        for (int j = 0; j < rows; j++)
         {
-            means[i] = means[i] + row[i];
+            minVal = std::min(minVal, _allData[j][i]);
+            maxVal = std::max(maxVal, _allData[j][i]);
         }
+        _minValues.emplace_back(minVal);
+        _maxValues.emplace_back(maxVal);
+        maxVal = 0;
+        minVal = INT_MAX;
     }
-
-    int n = _allData.size();
-    for (int i = 0; i < means.size(); i++) {
-        means[i] = means[i] / n;
-    }
-
-    return means;
-}
-
-std::vector<double> Dataset::computeStdevs(std::vector<double> *means)
-{
-    std::vector<double> stdevs(_allData.at(0).size()-1, 0);
-    for (auto row : _allData)
-    {
-        for (int i = 0; i < row.size()-1; i++)
-        {
-            stdevs[i] += pow(abs(row[i] - means->at(i)), 2);
-        }
-    }
-    int n = _allData.size();
-    for (int i = 0; i < stdevs.size()-1; i++) {
-        stdevs[i] = sqrt(stdevs[i] / n);
-    }
-
-    return stdevs;
 }
 
 std::vector<std::string> Dataset::getHeader() 
@@ -136,3 +114,15 @@ std::vector<double> Dataset::getLabelData()
 {
     return _labelData;
 }
+
+std::vector<double> Dataset::getMaxValues()
+{
+    return _maxValues;
+}
+
+std::vector<double> Dataset::getMinValues()
+{
+    return _minValues;
+}
+
+

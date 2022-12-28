@@ -6,7 +6,6 @@
 class MLAlgorithm {
   public:
     virtual void train() = 0;
-    virtual void predict() = 0;
   private:
 };
 
