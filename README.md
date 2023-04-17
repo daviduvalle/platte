@@ -14,3 +14,11 @@ make
 ```bash
 ./Platte
 ```
+---
+## Capstone project information
+
+This is a Capstone option #1 project (project of your choice)
+
+### Project structure
+
+### Rubric points addressed
