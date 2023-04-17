@@ -1,10 +1,5 @@
 #include "linear_regression.h"
 
-LinearRegression::LinearRegression(Dataset * dataset) 
-{
-    _dataset = dataset;
-}
-
 void LinearRegression::train() 
 {
     int weightsCount = _dataset->getTrainingData()[0].size();

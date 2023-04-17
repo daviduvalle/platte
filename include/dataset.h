@@ -12,7 +12,8 @@
 class Dataset 
 {
     public:
-        Dataset(std::string filename, bool hasHeader, bool hasIndex);
+        Dataset(std::string filename, bool hasHeader, bool hasIndex) :
+            _filename(filename), _hasHeader(hasHeader), _hasIndex(hasIndex) {}
         void readData();
         std::vector<std::string> getHeader();
         std::vector<std::vector<double>> getTrainingData();

@@ -13,7 +13,7 @@
 class LinearRegression : public MLAlgorithm 
 {
     public:
-        LinearRegression(Dataset * dataset);
+        LinearRegression(Dataset * dataset) : _dataset(dataset) {}
         void train();
         double predict(std::vector<double> input);
         static constexpr int BATCH_SIZE = 32;

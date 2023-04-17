@@ -2,13 +2,6 @@
 
 const std::string WHITESPACE = " \n\r\t\f\v";
 
-Dataset::Dataset(std::string filename, bool hasHeader, bool hasIndex)
-{
-    _filename = filename;
-    _hasHeader = hasHeader;
-    _hasIndex = hasIndex;
-}
- 
 std::string ltrim(const std::string &s)
 {
     size_t start = s.find_first_not_of(WHITESPACE);
