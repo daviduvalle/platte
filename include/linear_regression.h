@@ -17,6 +17,7 @@ class LinearRegression : public MLAlgorithm
         void train();
         double predict(std::vector<double> input);
         static constexpr int BATCH_SIZE = 32;
+        std::vector<double> getWeights();
     private:
         Dataset *_dataset;
         std::vector<double> _weights;

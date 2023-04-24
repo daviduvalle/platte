@@ -2,6 +2,7 @@
 
 void LinearRegression::train() 
 {
+    std::cout << "training linear regression " << "\n";
     int weightsCount = _dataset->getTrainingData()[0].size();
     // Include the bias
     for (int i = 0; i < weightsCount + 1; i++)
@@ -139,4 +140,8 @@ double LinearRegression::predict(std::vector<double> input)
     prediction += _weights.at(_weights.size()-1);
 
     return prediction;
+}
+
+std::vector<double> LinearRegression::getWeights() {
+    return _weights;
 }

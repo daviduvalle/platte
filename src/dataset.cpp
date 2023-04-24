@@ -20,7 +20,6 @@ std::string trim(const std::string &s) {
 
 void Dataset::readData() 
 {
-    std::ifstream inputFile(_filename);
     std::string headerLine;
     std::string token;
     if (_hasHeader) 
@@ -91,6 +90,73 @@ void Dataset::computeMinMax()
         maxVal = 0;
         minVal = INT_MAX;
     }
+}
+
+void Dataset::deleteData() {
+    _header.clear();
+    _trainingData.clear();
+    _labelData.clear();
+    _maxValues.clear();
+    _minValues.clear();
+    _allData.clear();
+}
+
+void Dataset::deleteFromSource(Dataset &source) {
+    source._header.clear();
+    source._trainingData.clear();
+    source._labelData.clear();
+    source._maxValues.clear();
+    source._minValues.clear();
+    source._allData.clear();
+}
+
+void Dataset::copyFromSource(const Dataset &source) {
+    _header = source._header;
+    _trainingData = source._trainingData;
+    _labelData = source._labelData;
+    _maxValues = source._maxValues;
+    _minValues = source._minValues;
+    _allData = source._allData;
+}
+
+Dataset::~Dataset() {
+    deleteData();
+    std::cout << "Destroys dataset " << this << "\n";
+}
+
+// copy ctr
+Dataset::Dataset(const Dataset &source) {
+    copyFromSource(source);
+    std::cout << "Copying contents of instance: " << &source << " to instance: " << this << "\n";
+}
+
+// assign operator
+Dataset & Dataset::operator=(const Dataset &source) {
+    std::cout << "Assigning content from " << &source << " to instance: " << this << "\n";
+    if (this == &source) {
+        return *this;
+    }
+    deleteData();
+    copyFromSource(source);
+    return *this;
+}
+
+// move ctr
+Dataset::Dataset(Dataset &&source) {
+    std::cout << "Moving contents from " << &source << " to instance " << this << "\n";
+    copyFromSource(source);
+    deleteFromSource(source);
+}
+
+Dataset & Dataset::operator=(Dataset &&source) {
+    std::cout << "Moving (assign) contents from " << &source << " to instance " << this << "\n";
+    if (this == &source) {
+        return *this;
+    }
+    deleteData();
+    copyFromSource(source);
+    deleteFromSource(source);
+    return *this;
 }
 
 std::vector<std::string> Dataset::getHeader() 

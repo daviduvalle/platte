@@ -13,14 +13,24 @@ class Dataset
 {
     public:
         Dataset(std::string filename, bool hasHeader, bool hasIndex) :
-            _filename(filename), _hasHeader(hasHeader), _hasIndex(hasIndex) {}
+            inputFile(filename), _hasHeader(hasHeader), _hasIndex(hasIndex) {
+            readData();
+            std::cout << "Creates dataset " << this << "\n";
+        }
         void readData();
         std::vector<std::string> getHeader();
         std::vector<std::vector<double>> getTrainingData();
         std::vector<double> getLabelData();
         std::vector<double> getMinValues();
         std::vector<double> getMaxValues();
+        // object lifetime and operators
+        ~Dataset();
+        Dataset(const Dataset &source);
+        Dataset &operator=(const Dataset &source);
+        Dataset(Dataset &&source);
+        Dataset &operator=(Dataset &&source);
     private:
+        std::ifstream inputFile;
         std::vector<std::string> _header;
         std::vector<std::vector<double>> _allData;
         std::vector<std::vector<double>> _trainingData;
@@ -32,6 +42,10 @@ class Dataset
         bool _hasIndex;
         void normalizeData();
         void computeMinMax();
+        // object lifetime helper methods
+        void deleteData();
+        void deleteFromSource(Dataset &source);
+        void copyFromSource(const Dataset &source);
 };
 
 #endif
