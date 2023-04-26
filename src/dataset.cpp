@@ -121,18 +121,15 @@ void Dataset::copyFromSource(const Dataset &source) {
 
 Dataset::~Dataset() {
     deleteData();
-    std::cout << "Destroys dataset " << this << "\n";
 }
 
 // copy ctr
 Dataset::Dataset(const Dataset &source) {
     copyFromSource(source);
-    std::cout << "Copying contents of instance: " << &source << " to instance: " << this << "\n";
 }
 
 // assign operator
 Dataset & Dataset::operator=(const Dataset &source) {
-    std::cout << "Assigning content from " << &source << " to instance: " << this << "\n";
     if (this == &source) {
         return *this;
     }
@@ -143,14 +140,13 @@ Dataset & Dataset::operator=(const Dataset &source) {
 
 // move ctr
 Dataset::Dataset(Dataset &&source) {
-    std::cout << "Moving contents from " << &source << " to instance " << this << "\n";
     copyFromSource(source);
     deleteFromSource(source);
 }
 
 Dataset & Dataset::operator=(Dataset &&source) {
-    std::cout << "Moving (assign) contents from " << &source << " to instance " << this << "\n";
-    if (this == &source) {
+    if (this == &source)
+    {
         return *this;
     }
     deleteData();

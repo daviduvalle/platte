@@ -2,7 +2,6 @@
 
 void LinearRegression::train() 
 {
-    std::cout << "training linear regression " << "\n";
     int weightsCount = _dataset->getTrainingData()[0].size();
     // Include the bias
     for (int i = 0; i < weightsCount + 1; i++)
@@ -145,3 +144,58 @@ double LinearRegression::predict(std::vector<double> input)
 std::vector<double> LinearRegression::getWeights() {
     return _weights;
 }
+
+LinearRegression::~LinearRegression() {
+    _weights.clear();
+}
+
+// copy ctr
+LinearRegression::LinearRegression(const LinearRegression &source)
+{
+    _weights = source._weights;
+    _dataset = source._dataset;
+}
+
+// assign operator
+LinearRegression &LinearRegression::operator=(const LinearRegression &source)
+{
+    if (this == &source)
+    {
+        return *this;
+    }
+    _weights.clear();
+    _weights = source._weights;
+    _dataset = source._dataset;
+
+    return *this;
+}
+
+LinearRegression::LinearRegression(LinearRegression &&source)
+{
+    // copy from source
+    _weights = source._weights;
+    _dataset = source._dataset;
+    // delete from source
+    source._weights.clear();
+    source._dataset = nullptr;
+}
+
+LinearRegression & LinearRegression::operator=(LinearRegression &&source)
+{
+    if (this == &source)
+    {
+        return *this;
+    }
+    // delete owned data
+    _weights.clear();
+    _dataset = nullptr;
+    // copy from source
+    _weights = source._weights;
+    _dataset = source._dataset;
+    // delete from source
+    source._weights.clear();
+    source._dataset = nullptr;
+
+    return *this;
+}
+

@@ -15,7 +15,6 @@ class Dataset
         Dataset(std::string filename, bool hasHeader, bool hasIndex) :
             inputFile(filename), _hasHeader(hasHeader), _hasIndex(hasIndex) {
             readData();
-            std::cout << "Creates dataset " << this << "\n";
         }
         void readData();
         std::vector<std::string> getHeader();
@@ -47,5 +46,4 @@ class Dataset
         void deleteFromSource(Dataset &source);
         void copyFromSource(const Dataset &source);
 };
-
 #endif

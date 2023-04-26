@@ -18,6 +18,12 @@ class LinearRegression : public MLAlgorithm
         double predict(std::vector<double> input);
         static constexpr int BATCH_SIZE = 32;
         std::vector<double> getWeights();
+        // object lifetime and operators
+        ~LinearRegression();
+        LinearRegression(const LinearRegression &source);
+        LinearRegression &operator=(const LinearRegression &source);
+        LinearRegression(LinearRegression &&source);
+        LinearRegression &operator=(LinearRegression &&source);
     private:
         Dataset *_dataset;
         std::vector<double> _weights;
