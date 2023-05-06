@@ -58,3 +58,18 @@ The `src` directory contains:
 | Overloaded functions allow the same function to operate on different parameters.     | N/A                                                                                                                                                                                            |
 | Derived class functions override virtual base class functions.| See [predict](https://github.com/daviduvalle/platte/blob/master/src/linear_regression.cpp#L136)                                                                                                |
 | Templates generalize functions in the project.                                 | N/A                                                                                                                                                                                            |
+
+
+#### Memory management
+
+| Criteria                                                     | Example                                                                                                                                                                                        |  
+|--------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| The project makes use of references in function declarations.                                                             | See [references usage](https://github.com/daviduvalle/platte/blob/master/src/linear_regression.cpp#L111)                                                                                       |
+| The project uses destructors appropriately. | See [dataset destructor](https://github.com/daviduvalle/platte/blob/master/src/dataset.cpp#L122)                                                                                               |
+| The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.     | See [dataset constructor](https://github.com/daviduvalle/platte/blob/master/include/dataset.h)                                                                                                 |
+| The project follows the Rule of 5.| See [linear_regression.cpp](https://github.com/daviduvalle/platte/blob/master/src/linear_regression.cpp)  and [dataset.cpp](https://github.com/daviduvalle/platte/blob/master/src/dataset.cpp) |
+| The project uses move semantics to move data, instead of copying it, where possible.                               | See [linear_regression.cpp](https://github.com/daviduvalle/platte/blob/master/src/linear_regression.cpp)  and [dataset.cpp](https://github.com/daviduvalle/platte/blob/master/src/dataset.cpp) |
+| The project uses smart pointers instead of raw pointers.        | N/A                                                                                                                                                                                            |
+
+#### Concurrency
+The project didn't use concurrency.
