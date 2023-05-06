@@ -59,13 +59,23 @@ std::vector<int> LinearRegression::computeRandomIndices()
     std::vector<int> randomIndices;
     std::set<int> seen;
 
-    while (randomIndices.size() < BATCH_SIZE)
+    if (_dataset->getTrainingData().size() <= BATCH_SIZE)
     {
-        int candidate = distrib(gen);
-        if (seen.find(candidate) == seen.end())
+        for (int i = 0; i < _dataset->getTrainingData().size(); i++)
         {
-            seen.insert(candidate);
-            randomIndices.emplace_back(candidate);
+            randomIndices.emplace_back(i);
+        }
+    }
+    else
+    {
+        while (randomIndices.size() < BATCH_SIZE)
+        {
+            int candidate = distrib(gen);
+            if (seen.find(candidate) == seen.end())
+            {
+                seen.insert(candidate);
+                randomIndices.emplace_back(candidate);
+            }
         }
     }
 

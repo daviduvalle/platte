@@ -8,19 +8,21 @@
 using std::vector;
 using std::string;
 
-int main() {
-    std::cout << "Demo 1\n";
-    Dataset dataset = Dataset("../linear_data.csv", true, false);
+void runDemo(std::string filepath, double inputData)
+{
+    Dataset dataset = Dataset(filepath, true, false);
     LinearRegression linearRegression = LinearRegression(&dataset);
     linearRegression.train();
-
-    for (int i = 0; i < linearRegression.getWeights().size(); i++) {
-        std::cout << linearRegression.getWeights()[i] << " ";
-    }
-    std::cout << "\n";
     std::vector<double> input;
-    input.emplace_back(100);
+    input.emplace_back(inputData);
     double pred = linearRegression.predict(input);
-    std::cout << "Prediction: " << pred << "\n";
+    std::cout << "Prediction of x: " << inputData << ", y : "<< pred << " \n";
+}
+
+int main() {
+    std::cout << "Demo 1\n";
+    runDemo("../linear_data.csv", 100);
+    std::cout << "Demo 2\n";
+    runDemo("../linear_data2.csv", 7);
     return 0;
 }
